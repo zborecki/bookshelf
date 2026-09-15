@@ -6,6 +6,11 @@ A backend system for managing the day-to-day operations of a library. The applic
 The system is built with C# and provides a RESTful API for external clients, along with an admin panel built with React for managing library data and monitoring its current status.  
 
 ## Overview
-The system is centered around four core concepts: books, authors, copies and loans.  
+The system is centered around four core concepts: books, authors, copies and loans. [Coming soon]
 
-[Coming soon]
+## Technologies
+- C#
+
+## Documentation
+- [Book](docs/book.md)
+- [Copy](docs/copy.md)
