@@ -1,6 +1,84 @@
-# Book - Data model
+# Book
 
 ## Overview
 Book is one of the main domain entities in the library system. It represents a catalog entry, not a physical copy located in the library.  
 
 Separating a book from a copy is a key element of the data model. Book stores information describing a specific title, while copy represents its physical instance in the library.
+
+## Responsibility
+The entity is responsible for storing basic catalog information about a book:
+- identifying the book
+- storing the title
+- storing the ISBN
+- associating the book with its authors
+- associating the book with its physical copies
+
+Book is not responsible for:
+- the current status of a physical copy
+- information about who has a copy
+- loan history
+- the borrowing or returning process
+
+This information belongs to Copy and Loan, respectively.
+
+## Properties and constraints
+| Property  | Type                  | Required | Constraints                      | Description                                                     |
+| --------- | --------------------- | -------- | -------------------------------- | --------------------------------------------------------------- |
+| `Id`      | `int`                 |      Yes | Primary key, unique              | Unique identifier of the book.                                  |
+| `Title`   | `string`              |      Yes | Maximum length: `255`, not empty | Title of the publication.                                       |
+| `ISBN`    | `string`              |      Yes | Maximum length: `20`, unique     | International Standard Book Number identifying the publication. |
+| `Authors` | `ICollection<Author>` |      Yes | Many-to-many relationship        | Authors associated with the book.                               |
+| `Copies`  | `ICollection<Copy>`   |      Yes | One-to-many relationship         | Physical copies belonging to the book.                          |
+
+## Lifecycle
+The book represents a publication in the library catalog and remains in the catalog independently of the physical copies associated with it. A typical lifecycle starts when a new book is added to the catalog. At this stage, the system stores the book's basic information, such as its title and ISBN, and associates the book with one or more authors. Physical copies can then be added and linked to the book. Once copies exist, their individual lifecycle is managed independently from the Book entity. A copy can change its status, for example from Available to Borrowed, and later back to Available. These state changes do not modify the lifecycle of the book itself.  
+
+A book therefore remains a catalog entry even when all of its copies are currently borrowed, unavailable, or temporarily removed from circulation. The Book entity describes what the publication is, while the Copy entity represents the physical resources that can be borrowed.  
+
+When a book is no longer intended to be part of the active catalog, its removal must take into account the copies and loan history associated with it. Depending on the business requirements, the system may prevent deletion when copies or historical loans exist, use soft deletion, or archive the book instead of physically removing it from the database.  
+
+```
+Book created → Authors assigned → Copies added → Copies change availability → Book remains in catalog
+```
+
+## Availability
+Book availability is derived from the current status of its physical copies. The entity should not store an independent `IsAvailable` property, because availability is determined by the `Copy` entities associated with the book. A book is considered **available for borrowing** when at least one of its copies has the `Available` status. The following `Copy` statuses are considered **not available for borrowing**:
+
+| Copy Status     | Description                                                                                                 | Available for Borrowing |
+| --------------- | ----------------------------------------------------------------------------------------------------------- | ----------------------: |
+| `Available`     | The copy is available and can be borrowed.                                                                  |                     Yes |
+| `Borrowed`      | The copy is currently borrowed by a library user.                                                           |                      No |
+| `Reserved`      | The copy is reserved for a specific user and is not available for general borrowing.                        |                      No |
+| `Unavailable`   | The copy is temporarily unavailable for operational or other business reasons.                              |                      No |
+| `Damaged`       | The copy is damaged and cannot currently be borrowed.                                                       |                      No |
+| `Lost`          | The copy has been determined to be lost.                                                                    |                      No |
+| `Missing`       | The copy cannot currently be located and its final status has not yet been determined.                      |                      No |
+| `ToBeWithdrawn` | The copy has been marked for withdrawal and is awaiting completion of the withdrawal process.               |                      No |
+| `Withdrawn`     | The copy has been permanently withdrawn from circulation.                                                   |                      No |
+| `Archived`      | The copy is retained for historical or administrative purposes but is no longer part of active circulation. |                      No |
+
+The availability rule is therefore:
+
+```text
+Book is available = at least one Copy has Status = Available
+```
+
+For example:
+
+```text
+Copy #1 — Borrowed
+Copy #2 — Damaged
+Copy #3 — Available
+```
+
+The book is available because `Copy #3` can be borrowed.
+
+If all copies have a non-available status:
+
+```text
+Copy #1 — Borrowed
+Copy #2 — Reserved
+Copy #3 — ToBeWithdrawn
+```
+
+The book is unavailable.  
