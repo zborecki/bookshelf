@@ -1,0 +1,104 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+.builds
+publish/
+ClientBin/
+
+# Build artifacts
+*.obj
+*.ilk
+*.pdb
+*.pch
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tmp
+*.tlb
+*.tli
+*.tlh
+*_i.c
+*_p.c
+
+# Logs and test results
+*.log
+Logs/
+TestResults/
+[Tt]est[Rr]esult*
+*.Cache
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.sln.docstates
+*.vspscc
+*.vssscc
+src/.vs/config/applicationhost.config
+
+# Visual C++ cache and intermediate files
+ipch/
+*.aps
+*.ncb
+*.opensdf
+*.sdf
+*.meta
+
+# Visual Studio Profiler
+*.psess
+*.vsp
+*.vspx
+
+# NuGet
+packages/
+
+# Project and package generation
+project.lock.json
+AppPackages/
+*.Publish.xml
+csx/
+*.build.csdef
+Generated_Code/
+
+# ReSharper
+_ReSharper*
+
+# NCrunch
+*.ncrunch*
+.*crunch*.local.xml
+
+# JetBrains Rider
+.idea/
+
+# ClickOnce
+[Ee]xpress/
+
+# Documentation tools
+DocProject/buildhelp/
+DocProject/Help/*.HxT
+DocProject/Help/*.HxC
+DocProject/Help/*.hhc
+DocProject/Help/*.hhk
+DocProject/Help/*.hhp
+DocProject/Help/Html2
+DocProject/Help/html
+
+# Guidance Automation Toolkit
+*.gpState
+
+# SQL / database files
+sql/
+*.dbmdl
+
+# StyleCop
+[Ss]tyle[Cc]op.*
+
+# Temporary and backup files
+~$*
+Backup*/
+_UpgradeReport_Files/
+UpgradeLog*.XML
