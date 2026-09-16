@@ -6,5 +6,4 @@ namespace Domain.Entities;
 public class Book(string title, string isbn) : Entity
 {
     public BookTitle Title = new(title);
-    public Isbn Isbn = new(isbn);
 }
