@@ -26,7 +26,7 @@ This information belongs to Copy and Loan, respectively.
 | --------- | --------------------- | -------- | -------------------------------- | --------------------------------------------------------------- |
 | `Id`      | `int`                 |      Yes | Primary key, unique              | Unique identifier of the book.                                  |
 | `Title`   | `string`              |      Yes | Maximum length: `255`, not empty | Title of the publication.                                       |
-| `ISBN`    | `string`              |      Yes | Maximum length: `20`, unique     | International Standard Book Number identifying the publication. |
+| `Isbn`    | `string`              |      Yes | Maximum length: `20`, unique     | International Standard Book Number identifying the publication. |
 | `Authors` | `ICollection<Author>` |      Yes | Many-to-many relationship        | Authors associated with the book.                               |
 | `Copies`  | `ICollection<Copy>`   |      Yes | One-to-many relationship         | Physical copies belonging to the book.                          |
 
